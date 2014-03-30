@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Package notes for uk.org.bobulous.java.intervals</title>
+		<meta charset="UTF-8">
+	</head>
+	<body>
+		<p>A library of Java classes which support the concept of mathematical
+			intervals.</p>
+		<p>In mathematics an interval is a contiguous section through a set
+			which has a natural ordering. The interval defines the least and
+			greatest values from that set which are included in the interval, and
+			these limits are known as endpoints. An interval also defines whether
+			each endpoint is closed or open. A closed endpoint includes its own
+			value as being within the interval. An open endpoint does not include
+			its own value within the interval.</p>
+		<p>For example, using integers as the naturally ordered set, you could
+			define a closed interval [0, 9] which includes zero, nine, and every
+			integer between the two. Or, switching to the set of real numbers, you
+			could define an open interval (-10.0, 10.0) which includes every real number
+			between negative ten and ten, but <strong>does not</strong> include the
+			values negative ten or ten.</p>
+		<p>Note that in mathematics a closed endpoint is denoted with a square
+			bracket, and an open endpoint is denoted with a parenthesis. It is also
+			possible to define an interval where one endpoint is open and the other
+			is closed. For example, on the set of integers, the interval (0, 5]
+			includes every integer between zero and five, and also includes five,
+			but does not include zero.</p>
+		<p>An interval can also be unbounded, which is represented in
+			mathematics by specifying negative/positive infinity. For example, the
+			unbounded integer interval (0, ∞) includes all integers greater than
+			zero, whereas the real number interval (-∞, 0.0) includes all real
+			numbers less than zero. In this library, infinity is represented in
+			an endpoint value by the <code>null</code> object, allowing
+			unbounded endpoints to be defined.</p>
+		<p>This library allows an interval to be defined within any basis type
+			<code>T</code> which implements <code>Comparable&lt;T&gt;</code>.
+			The type must be comparable with itself because this comparison
+			determines the natural ordering of the type. Types which meet this
+			requirement include <code>Integer</code>, <code>Double</code>,
+			<code>Character</code>, <code>String</code>, and
+			<code>BigDecimal</code>. Other examples of naturally ordered types
+			include <code>Date</code> and <code>Calendar</code>, but be careful
+			with these types because they produce mutable objects, and an
+			<code>Interval</code> cannot stop its endpoint values being altered
+			if mutable types are used. If mutable types are used for an
+			<code>Interval</code>, then it is recommended that great care be
+			taken, and that neither the resulting <code>Interval</code> objects
+			nor the objects which form their endpoints ever be shared.</p>
+	</body>
+</html>
