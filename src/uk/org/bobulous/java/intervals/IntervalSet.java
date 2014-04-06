@@ -43,7 +43,7 @@ public final class IntervalSet<T extends Comparable<T>> implements
 	private final Set<Interval<T>> intervalSet;
 
 	/*
-	 * Private constructor required because IntervalSet is immutable, and unmodifiableIterator
+	 * Private constructor required because IntervalSet is immutable, and it
 	 * would be very ugly to use varargs to permit a variable number of Interval
 	 * objects as parameters in the IntervalSet constructor.
 	 * So the Builder pattern is used instead.
@@ -320,7 +320,7 @@ public final class IntervalSet<T extends Comparable<T>> implements
 									getLowerEndpointMode();
 						} else {
 							// A lowest-so-far value has already been set, so
-							// compare the current value to see whether unmodifiableIterator
+							// compare the current value to see whether it
 							// is lower.
 							if (intersectionInterval.getLowerEndpoint().
 									compareTo(leastLowerEndpointInIntersection)
@@ -458,7 +458,7 @@ public final class IntervalSet<T extends Comparable<T>> implements
 		 * represented by a single interval.
 		 * For example, [0, 1] and [1, 2] can be represented by a single
 		 * interval of [0, 2] because every member permitted by the intervals
-		 * [0, 1] and [1, 2] is permitted by the interval [1, 2], and every
+		 * [0, 1] and [1, 2] is permitted by the interval [0, 2], and every
 		 * value excluded by [0, 1] and [1, 2] is excluded by [0, 2].
 		 */
 		private static <Q extends Comparable<Q>> boolean singleUnionExistsFor(
@@ -470,7 +470,7 @@ public final class IntervalSet<T extends Comparable<T>> implements
 			if (first.intersects(second)) {
 				return true;
 			}
-			// Even if the two intervals do not intersect, unmodifiableIterator is possible that
+			// Even if the two intervals do not intersect, it is possible that
 			// they share an endpoint value such that one interval has a CLOSED
 			// endpoint for the value while the other has an OPEN endpoint, and
 			// this will also form a seamless union so that the two intervals
@@ -504,7 +504,7 @@ public final class IntervalSet<T extends Comparable<T>> implements
 			}
 			// There is no intersection between these intervals, and they do not
 			// butt up against each other with a CLOSED + OPEN shared value, so
-			// unmodifiableIterator is not possible to replace the pair of them with a single
+			// it is not possible to replace the pair of them with a single
 			// interval which contains all the values they contain but none of
 			// the values contained by neither of them.
 			return false;
