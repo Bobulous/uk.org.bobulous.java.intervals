@@ -75,7 +75,6 @@ package uk.org.bobulous.java.intervals;
  * which has a natural order.
  * @see GenericInterval
  * @see IntervalComparator
- * @see IntervalSet
  */
 public interface Interval<T extends Comparable<T>> {
 
@@ -130,23 +129,6 @@ public interface Interval<T extends Comparable<T>> {
 	public EndpointMode getUpperEndpointMode();
 
 	/**
-	 * Reports on whether this interval represents the empty set. If this
-	 * interval does represent the empty set then there is no value which is
-	 * considered to be contained by this interval.
-	 * <p>
-	 * Note that for any value <var>a</var> all of the following intervals
-	 * represent the empty set: (<var>a</var>,<var>a</var>] and
-	 * [<var>a</var>,<var>a</var>) and (<var>a</var>,<var>a</var>). In other
-	 * words, if the lower and upper endpoints are the same value then the
-	 * interval represents the empty set if one or both endpoints is
-	 * <code>OPEN</code>.</p>
-	 *
-	 * @return <code>true</code> if this interval has no members;
-	 * <code>false</code> if this interval has any members.
-	 */
-	public boolean isEmpty();
-
-	/**
 	 * Reports on whether this interval includes the specified value.
 	 *
 	 * @param value the value to test.
@@ -171,61 +153,4 @@ public interface Interval<T extends Comparable<T>> {
 	 * method.
 	 */
 	public boolean includes(Interval<T> interval);
-
-	/**
-	 * Reports on whether this interval intersects with the specified interval.
-	 * <p>
-	 * That is, returns <code>true</code> if there exists a value <var>v</var>
-	 * such that <code>this.includes(v)</code> and
-	 * <code>interval.includes(v)</code> both return <code>true</code>; returns
-	 * <code>false</code> otherwise.</p>
-	 *
-	 * @param interval the other interval.
-	 * @return <code>true</code> if this interval shares any members with the
-	 * other interval.
-	 * @throws NullPointerException if <code>null</code> is provided to this
-	 * method.
-	 */
-	public boolean intersects(Interval<T> interval);
-
-	/**
-	 * Returns the intersection of this interval with the specified interval. In
-	 * other words, returns an interval which contains all of the values
-	 * contained by <strong>both</strong> this interval and the specified
-	 * interval, or returns an interval (of arbitrary endpoint values) which
-	 * represents the empty set (includes no values) if the two do not share any
-	 * values.
-	 *
-	 * @param interval the other interval.
-	 * @return an <code>Interval</code> which represents the intersection of
-	 * this interval with the specified interval, or an empty interval if this
-	 * interval does not intersect with the specified interval.
-	 */
-	public Interval<T> intersection(Interval<T> interval);
-
-	/**
-	 * Returns the union of this interval with the specified interval. In other
-	 * words, returns a single interval (if one exists) which only includes all
-	 * values included by this interval <strong>and</strong> all of the values
-	 * included by the specified interval. Returns <code>null</code> if no such
-	 * union exists.
-	 * <p>
-	 * Note that two intervals can produce a union if and only if they either
-	 * intersect, or they adjoin at a shared endpoint and one of the intervals
-	 * includes that endpoint value. For example, the intervals [<var>a</var>,
-	 * <var>b</var>) and [<var>b</var>, <var>c</var>] form the union
-	 * [<var>a</var>, <var>c</var>] because they adjoin at the value
-	 * <var>b</var>, and one of the intervals does include the value
-	 * <var>b</var>. But the two intervals [<var>a</var>,
-	 * <var>b</var>) and (<var>b</var>, <var>c</var>] do not form a union
-	 * because even though they adjoin at value <var>b</var>, neither interval
-	 * actually includes the value <var>b</var>.</p>
-	 *
-	 * @param interval the interval with which this interval should form a
-	 * union, if possible.
-	 * @return the <code>Interval</code> which represents the union of this
-	 * interval with the specified interval, or <code>null</code> if no union
-	 * exists.
-	 */
-	public Interval<T> union(Interval<T> interval);
 }
