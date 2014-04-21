@@ -8,27 +8,25 @@
 package uk.org.bobulous.java.intervals;
 
 /**
- * An interval within a naturally ordered type.
+ * An interval within a naturally ordered type. The natural order is defined by
+ * the <code>compareTo</code> method of the type.
  * <p>
- * Each <code>Interval</code> contains a lower endpoint value and an upper
- * endpoint value, such that the result of <code>lower.compareTo(upper)</code>
- * must be zero or greater. In other words, the upper endpoint must be equal to
- * or greater than the lower endpoint according to the natural ordering of the
- * interval basis type.</p>
+ * An interval has a lower endpoint and an upper endpoint, each having a value
+ * of the type which forms the basis of the interval, and each having a mode of
+ * either open or closed. An interval includes all values which are permitted by
+ * <strong>both</strong> the lower <strong>and</strong> upper endpoints. A
+ * closed lower endpoint permits all values which are greater-than-or-equal-to
+ * the lower endpoint value; an open lower endpoint permits all values which are
+ * greater than the lower endpoint value. A closed upper endpoint permits all
+ * values which are less-than-or-equal-to the upper endpoint value; an open
+ * upper endpoint permits all values which are less than the upper endpoint
+ * value.</p>
  * <p>
- * For example, if an <code>Interval&lt;Integer&gt;</code> object (an interval
- * of integers) has a lower endpoint value of zero then its upper endpoint value
- * must be zero or greater. If an <code>Interval&lt;Character&gt;</code> (an
- * interval of character values) had a lower endpoint value of 'a' then its
- * upper endpoint value would have to be <code>'a'</code> or <code>'b'</code> or
- * any other character which causes <code>lower.compareTo(upper)</code> to
- * return zero or greater.</p>
- * <p>
- * If an endpoint is null then it means there is no limit to what is included in
- * that direction. So a <code>null</code> lower endpoint means that all values
- * lesser than the upper endpoint are contained by the interval; a
- * <code>null</code> upper endpoint means that all values greater than the lower
- * endpoint are included in the interval; and if both endpoints are
+ * If an endpoint is <code>null</code> then it means there is no limit to what
+ * is included in that direction. So a <code>null</code> lower endpoint means
+ * that all values permitted by the upper endpoint are included in the interval;
+ * a <code>null</code> upper endpoint means that all values permitted by the
+ * lower endpoint are included in the interval; and if both endpoints are
  * <code>null</code> then all values are included in this interval. Note that
  * <code>null</code> itself is never included in an interval, as a null object
  * represents the lack of a value. Be aware that null endpoints will allow any
@@ -55,9 +53,9 @@ package uk.org.bobulous.java.intervals;
  * <p>
  * An interval can include zero, one or both of its endpoint values. This is
  * specified by the mode of each endpoint. {@link EndpointMode#CLOSED} means
- * that the endpoint value itself is included in the interval, while
+ * that the endpoint value itself is permitted by the endpoint, while
  * {@link EndpointMode#OPEN} means that the endpoint value itself is not
- * included in the interval. For instance, an
+ * permitted by the endpoint. For instance, an
  * <code>Interval&lt;Double&gt;</code> might have a lower endpoint value of zero
  * and a lower endpoint mode of <code>EndpointMode.OPEN</code> which means that
  * zero is the lower limit of the interval but is not included in the interval.

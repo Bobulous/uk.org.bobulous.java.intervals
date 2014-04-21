@@ -15,7 +15,7 @@ import uk.org.bobulous.java.intervals.Interval.EndpointMode;
  * <p>
  * Each <code>GenericInterval</code> contains a lower endpoint value and an
  * upper endpoint value such that the result of
- * <code>lower.compareTo(upper)</code> must be zero or greater. In other words,
+ * <code>upper.compareTo(lower)</code> must be zero or greater. In other words,
  * the upper endpoint must be equal to or greater than the lower endpoint
  * according to the natural ordering of the interval basis type.</p>
  * <p>
@@ -25,7 +25,7 @@ import uk.org.bobulous.java.intervals.Interval.EndpointMode;
  * <code>GenericInterval&lt;Character&gt;</code> (an interval of character
  * values) had a lower endpoint value of <code>'a'</code> then its upper
  * endpoint value would have to be <code>'a'</code> or <code>'b'</code> or any
- * other character which causes <code>lower.compareTo(upper)</code> to return
+ * other character which causes <code>upper.compareTo(lower)</code> to return
  * zero or greater.</p>
  * <p>
  * If an endpoint is <code>null</code> then it means that the endpoint is
