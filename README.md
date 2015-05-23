@@ -13,8 +13,16 @@ A package of classes which support mathematical intervals.
 
 <p>Fundamentally, an <code>Interval</code> is a type which says "include all values of the basis type which occur between the lower endpoint and upper endpoint, according to the natural ordering of the basis type".</p>
 
-<h2>GenericInterval</code>
+<h2>GenericInterval</h2>
 
 <p>A concrete implementation of the <code>Interval</code> type, providing a constructor which allows an interval to be created in any basis type, with open and/or closed endpoints, and support for unbounded endpoints (having a <code>null</code> value which represents infinity).</p>
 
 <p>See the JavaDoc within the source code for further details.</p>
+
+<h2>NumericInterval</h2>
+
+<p>An interface which defines an extension of Interval, adding methods which can operate on intervals through a numeric type. The basis type must implement both <code>Number</code> and <code>Comparable&lt;T&gt;</code>. This interface adds methods including <code>isEmpty()</code>, <code>intersectsWith(NumericInterval&lt;T&gt;)</code> and <code>unitesWith(NumericInterval&lt;T&gt;)</code> which can only be defined for intervals through numeric types.</p>
+
+<h2>IntegerInterval</h2>
+
+<p>A concrete implementation of <code>NumericInterval&lt;Integer&gt;</code>. Provides methods to check for and calculate intersections and unions between intervals of integers.</p>
