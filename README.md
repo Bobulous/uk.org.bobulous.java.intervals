@@ -15,7 +15,7 @@ A package of classes which support mathematical intervals.
 
 <h2>GenericInterval</h2>
 
-<p>A concrete implementation of the <code>Interval</code> type, providing a constructor which allows an interval to be created in any basis type, with open and/or closed endpoints, and support for unbounded endpoints (having a <code>null</code> value which represents infinity).</p>
+<p>A concrete implementation of the <code>Interval</code> type, providing a constructor which allows an interval to be created in any basis type which is naturally ordered, allowing open and/or closed endpoints, and support for unbounded endpoints (having a <code>null</code> value which represents infinity).</p>
 
 <p>See the JavaDoc within the source code for further details.</p>
 
