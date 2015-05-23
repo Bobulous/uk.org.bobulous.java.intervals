@@ -1,7 +1,9 @@
 uk.org.bobulous.java.intervals
 ==============================
 
-A library of classes which support mathematical intervals.
+A package of classes which support mathematical intervals.
+
+<p>See the page <a href="http://www.bobulous.org.uk/coding/intervals.html">intervals in Java</a> for an introduction to this package.</p>
 
 <h2>Interval</h2>
 
