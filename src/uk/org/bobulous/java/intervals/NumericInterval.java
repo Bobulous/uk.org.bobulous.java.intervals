@@ -29,14 +29,23 @@ public interface NumericInterval<T extends Number & Comparable<T>> extends
 	 * difference between the two endpoints and is calculated by subtracting the
 	 * lower endpoint value from the upper endpoint value. If either endpoint is
 	 * null then the width is infinite and not a number, and this method will
-	 * return <code>null</code>.
+	 * return <code>null</code>. If this interval is empty then this method will
+	 * return zero.
+	 * <p>
+	 * The width of an interval is also known as its length, diameter, measure
+	 * or size.</p>
+	 * <p>
+	 * Note that the width is simply the difference between the two endpoint
+	 * values regardless of the endpoint modes. This method returns the same
+	 * width for both (0, 5) and [0, 5] even though the two sets do not permit
+	 * exactly the same set of integers.</p>
 	 *
-	 * @return a numeric amount of type <code>T</code> which is equal to the
-	 * difference between the two endpoints, or zero if the interval represents
-	 * the empty set, or <code>null</code> if either endpoint is <code>null</code>.
+	 * @return a numeric amount which is equal to the difference between the two
+	 * endpoints, or zero if the interval represents the empty set, or
+	 * <code>null</code> if either endpoint is <code>null</code>.
 	 */
 	public T width();
-	
+
 	/**
 	 * Reports on whether this interval represents the empty set.
 	 *

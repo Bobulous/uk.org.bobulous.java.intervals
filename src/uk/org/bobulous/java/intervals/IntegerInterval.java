@@ -12,11 +12,11 @@ import java.util.Objects;
 /**
  * An immutable <code>NumericInterval</code> whose endpoints have type
  * <code>Integer</code>.
- * 
- * <p><strong>WARNING:</strong> development and testing are still in early
- * stages. Consider this class to be in its alpha testing phase. Use with
- * caution, and do not rely on its structure remaining in exactly its current
- * form!</p>
+ *
+ * <p>
+ * <strong>WARNING:</strong> development and testing are still in early stages.
+ * Consider this class to be in its alpha testing phase. Use with caution, and
+ * do not rely on its structure remaining in exactly its current form!</p>
  *
  * @author Bobulous <http://www.bobulous.org.uk/>
  */
@@ -36,6 +36,11 @@ class IntegerInterval implements NumericInterval<Integer> {
 	public static final IntegerInterval EMPTY_SET = new IntegerInterval(
 			EndpointMode.OPEN, 0, 0, EndpointMode.OPEN);
 
+	/*
+	Private constructor because static methods are provided for the creation of
+	intervals with different endpoint modes. (This also allows for the option of
+	adding caching of common instances in future.)
+	*/
 	private IntegerInterval(EndpointMode lowerMode, Integer lower, Integer upper,
 			EndpointMode upperMode) {
 		this.lower = lower;
@@ -44,21 +49,64 @@ class IntegerInterval implements NumericInterval<Integer> {
 		this.upperMode = upperMode;
 	}
 
+	/**
+	 * Constructs a closed interval with the given integer endpoint values.
+	 *
+	 * @param lower the value of the lower endpoint or <code>null</code> if the
+	 * lower endpoint is unbounded (infinite).
+	 * @param upper the value of the upper endpoint or <code>null</code> if the
+	 * upper endpoint is unbounded (infinite).
+	 * @return an <code>IntegerInterval</code> with the given endpoint values
+	 * and both endpoint modes set to <code>EndpointMode.CLOSED</code>.
+	 */
 	public static IntegerInterval closed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.CLOSED, lower, upper,
 				EndpointMode.CLOSED);
 	}
 
+	/**
+	 * Constructs an open interval with the given integer endpoint values.
+	 *
+	 * @param lower the value of the lower endpoint or <code>null</code> if the
+	 * lower endpoint is unbounded (infinite).
+	 * @param upper the value of the upper endpoint or <code>null</code> if the
+	 * upper endpoint is unbounded (infinite).
+	 * @return an <code>IntegerInterval</code> with the given endpoint values
+	 * and both endpoint modes set to <code>EndpointMode.OPEN</code>.
+	 */
 	public static IntegerInterval open(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.OPEN, lower, upper,
 				EndpointMode.OPEN);
 	}
 
+	/**
+	 * Constructs a left-closed interval with the given integer endpoint values.
+	 *
+	 * @param lower the value of the lower endpoint or <code>null</code> if the
+	 * lower endpoint is unbounded (infinite).
+	 * @param upper the value of the upper endpoint or <code>null</code> if the
+	 * upper endpoint is unbounded (infinite).
+	 * @return an <code>IntegerInterval</code> with the given endpoint values
+	 * and the lower endpoint mode set to <code>EndpointMode.CLOSED</code> and
+	 * the upper endpoint mode set to <code>EndpointMode.OPEN</code>.
+	 */
 	public static IntegerInterval leftClosed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.CLOSED, lower, upper,
 				EndpointMode.OPEN);
 	}
 
+	/**
+	 * Constructs a right-closed interval with the given integer endpoint
+	 * values.
+	 *
+	 * @param lower the value of the lower endpoint or <code>null</code> if the
+	 * lower endpoint is unbounded (infinite).
+	 * @param upper the value of the upper endpoint or <code>null</code> if the
+	 * upper endpoint is unbounded (infinite).
+	 * @return an <code>IntegerInterval</code> with the given endpoint values
+	 * and the lower endpoint mode set to <code>EndpointMode.OPEN</code> and the
+	 * upper endpoint mode set to <code>EndpointMode.CLOSED</code>.
+	 */
 	public static IntegerInterval rightClosed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.OPEN, lower, upper,
 				EndpointMode.CLOSED);
@@ -78,19 +126,34 @@ class IntegerInterval implements NumericInterval<Integer> {
 	@Override
 	public boolean isEmpty() {
 		if (upper == null || lower == null) {
+			// Unbounded intervals are never empty.
 			return false;
 		}
 		if (upper < lower) {
+			// If the upper endpoint is less than the lower endpoint then all
+			// integers are excluded, so the interval is empty.
 			return true;
 		}
 		if (upper.equals(lower)) {
+			// If the endpoint values are equal then both endpoints must be
+			// closed to permit that value. If either is open then even that
+			// value is excluded and so the interval is empty.
 			return getLowerEndpointMode().equals(EndpointMode.OPEN)
 					|| getUpperEndpointMode().equals(EndpointMode.OPEN);
 		}
-		if (upper - lower < 2) {
+		if (upper - lower == 1) {
+			// If the difference between the endpoints is exactly one and both
+			// endpoints are open then neither of the endpoint values is
+			// included by the interval and there are no other values between
+			// the two, making the interval empty. If either endpoint is closed
+			// then that value is permitted by the interval and so it is not
+			// empty.
 			return getLowerEndpointMode().equals(EndpointMode.OPEN)
 					&& getUpperEndpointMode().equals(EndpointMode.OPEN);
 		}
+		// To reach this point, the interval is bounded and its upper endpoint
+		// is at least two greater than its lower endpoint, so at least one
+		// integer is included by this interval and thus it is not empty.
 		return false;
 	}
 
@@ -155,10 +218,11 @@ class IntegerInterval implements NumericInterval<Integer> {
 		// If the overlap has a width of exactly one then one of the endpoints
 		// must be closed, otherwise neither of the endpoints values are common
 		// to both intervals and thus the intersection is empty.
-		if(first.getUpperEndpoint() - second.getLowerEndpoint() == 1) {
-			return first.getUpperEndpointMode().equals(EndpointMode.CLOSED) || second.getLowerEndpointMode().equals(EndpointMode.CLOSED);
+		if (first.getUpperEndpoint() - second.getLowerEndpoint() == 1) {
+			return first.getUpperEndpointMode().equals(EndpointMode.CLOSED)
+					|| second.getLowerEndpointMode().equals(EndpointMode.CLOSED);
 		}
-		
+
 		// At this point we know that the start of the second interval is not
 		// greater than or equal to the end of the first interval. And by virtue
 		// of being the "second" interval its start cannot be lower than the
@@ -276,7 +340,7 @@ class IntegerInterval implements NumericInterval<Integer> {
 		if (this.isEmpty() || interval.isEmpty()) {
 			return false;
 		}
-		if(this.intersectsWith(interval)) {
+		if (this.intersectsWith(interval)) {
 			return true;
 		}
 		IntervalComparator<Integer> comparator = IntervalComparator.
@@ -397,6 +461,16 @@ class IntegerInterval implements NumericInterval<Integer> {
 		return upperMode;
 	}
 
+	/**
+	 * Reports on whether the lower endpoint of this interval permits the given
+	 * integer value.
+	 *
+	 * @param value the value to test against the lower endpoint of this
+	 * interval.
+	 * @return <code>true</code> if the lower endpoint of this interval permits
+	 * the given value; <code>false</code> if the lower endpoint excludes the
+	 * given value.
+	 */
 	private boolean lowerAdmits(Integer value) {
 		if (lower == null) {
 			return true;
@@ -408,6 +482,16 @@ class IntegerInterval implements NumericInterval<Integer> {
 		}
 	}
 
+	/**
+	 * Reports on whether the upper endpoint of this interval permits the given
+	 * integer value.
+	 *
+	 * @param value the value to test against the upper endpoint of this
+	 * interval.
+	 * @return <code>true</code> if the upper endpoint of this interval permits
+	 * the given value; <code>false</code> if the upper endpoint excludes the
+	 * given value.
+	 */
 	private boolean upperEndpointAdmits(Integer value) {
 		if (upper == null) {
 			return true;
@@ -473,16 +557,105 @@ class IntegerInterval implements NumericInterval<Integer> {
 		return (lowerAdmitted && upperAdmitted);
 	}
 
+	/**
+	 * Returns a normalized version of this interval, such that finite endpoints
+	 * will be adjusted to give a closed endpoint, and unbounded endpoints will
+	 * be open.
+	 * <p>
+	 * A lower endpoint which is open with an integer value of n will, in the
+	 * returned interval, become a closed endpoint with an integer value of (n +
+	 * 1). An upper endpoint which is open with an integer value of n will
+	 * become a closed endpoint with an integer value of (n - 1).</p>
+	 * <p>
+	 * For example, the result of this method will be the interval [1, 5] for
+	 * all of the following intervals: (0, 5], (0, 6), [1, 5], [1, 6). And the
+	 * interval (−∞, +∞) will always be returned for all of the following
+	 * intervals: [−∞, +∞], (−∞, +∞], [−∞, +∞), (−∞, +∞) (where
+	 * <code>null</code> is used to represent infinity).</p>
+	 *
+	 * @return an <code>IntegerInterval</code> normalised so that finite
+	 * endpoints are closed and unbounded endpoints are open, such that the
+	 * result represents exactly the same set of integers as are represented by
+	 * this interval.
+	 */
+	private IntegerInterval normalized() {
+		if (this.isEmpty()) {
+			return EMPTY_SET;
+		}
+		Integer newLower, newUpper;
+		EndpointMode newLowerMode, newUpperMode;
+
+		if (lower == null) {
+			newLower = null;
+			newLowerMode = EndpointMode.OPEN;
+		} else {
+			newLowerMode = EndpointMode.CLOSED;
+			if (lowerMode.equals(EndpointMode.CLOSED)) {
+				newLower = lower;
+			} else {
+				newLower = lower + 1;
+			}
+		}
+
+		if (upper == null) {
+			newUpper = null;
+			newUpperMode = EndpointMode.OPEN;
+		} else {
+			newUpperMode = EndpointMode.CLOSED;
+			if (upperMode.equals(EndpointMode.CLOSED)) {
+				newUpper = upper;
+			} else {
+				newUpper = upper - 1;
+			}
+		}
+
+		if (Objects.equals(newLower, lower) && Objects.equals(newUpper, upper)
+				&& newLowerMode.equals(lowerMode)
+				&& newUpperMode.equals(upperMode)) {
+			return this;
+		}
+		return new IntegerInterval(newLowerMode, newLower, newUpper,
+				newUpperMode);
+	}
+
+	/**
+	 * Returns a hash code which is derived from the normalized equivalent of
+	 * this interval. Two <code>IntegerInterval</code> objects which are
+	 * considered equal according to the <code>equals</code> method will cause
+	 * this method to return an identical hash value.
+	 *
+	 * @return a hash code based on the normalized endpoint values and modes of
+	 * this interval.
+	 */
 	@Override
 	public int hashCode() {
+		// TODO: Consider normalizing endpoint values and modes here to avoid creation of additonal object.
+		IntegerInterval normal = this.normalized();
+		
 		int hash = 7;
-		hash = 79 * hash + (lower != null ? lower.hashCode() : 0);
-		hash = 79 * hash + (upper != null ? upper.hashCode() : 0);
-		hash = 79 * hash + lowerMode.hashCode();
-		hash = 79 * hash + upperMode.hashCode();
+		hash = 79 * hash + (normal.lower != null ? normal.lower.hashCode() : 0);
+		hash = 79 * hash + (normal.upper != null ? normal.upper.hashCode() : 0);
+		hash = 79 * hash + normal.lowerMode.hashCode();
+		hash = 79 * hash + normal.upperMode.hashCode();
 		return hash;
 	}
 
+	/**
+	 * Reports on whether the specified object is an
+	 * <code>IntegerInterval</code> representing exactly the same set of
+	 * integers permitted by this interval.
+	 * <p>
+	 * By this definition the interval (0, 6) is equal to the interval [1, 5]
+	 * because both include only the values 1, 2, 3, 4 and 5.</p>
+	 * <p>
+	 * Note that any two intervals representing the empty set are considered
+	 * equal regardless of their actual endpoint values.</p>
+	 *
+	 * @param obj the <code>Object</code> to test for equality.
+	 * @return <code>true</code> if the supplied <code>Object</code> is an
+	 * <code>IntegerInterval</code> whose normalized form is identical to the
+	 * normalized form of this interval.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof IntegerInterval)) {
@@ -505,43 +678,48 @@ class IntegerInterval implements NumericInterval<Integer> {
 			return false;
 		}
 
-		if (this.lower == null) {
-			if (that.lower != null) {
-				return false;
-			}
-		} else {
-			if (that.lower == null) {
-				return false;
-			}
-			// Values are non-null, so check equality.
-			if (!this.lower.equals(that.lower)) {
-				return false;
-			}
-			// Values are equal, so check that modes are the same.
-			if (!this.lowerMode.equals(that.lowerMode)) {
-				return false;
-			}
-		}
+		// TODO: Consider normalizing endpoint values and modes here to avoid creation of additonal objects.
+		IntegerInterval thisNormal = this.normalized();
+		IntegerInterval thatNormal = that.normalized();
 
-		if (this.upper == null) {
-			if (that.upper != null) {
-				return false;
-			}
-		} else {
-			if (that.upper == null) {
-				return false;
-			}
-			// Values are non-null, so check equality.
-			if (!this.upper.equals(that.upper)) {
-				return false;
-			}
-			// Values are equal, so check that modes are the same.
-			if (!this.upperMode.equals(that.upperMode)) {
-				return false;
-			}
-		}
+		return Objects.equals(thisNormal.lower, thatNormal.lower) && Objects.
+				equals(thisNormal.upper,
+						thatNormal.upper) && thisNormal.lowerMode.equals(
+						thatNormal.lowerMode) && thisNormal.upperMode.equals(
+						thatNormal.upperMode);
+	}
 
-		// No discrepancy by this point, so endpoint values and modes are equal.
-		return true;
+	/**
+	 * Produces a <code>String</code> which represents this interval in
+	 * mathematical notation.
+	 * <p>
+	 * A square bracket indicates a closed endpoint, and a parenthesis indicates
+	 * an open endpoint.</p>
+	 * <p>
+	 * An unbounded lower endpoint will be represented by "−∞" and an unbounded
+	 * upper endpoint by "+∞".</p>
+	 *
+	 * @return a <code>String</code> which contains the mathematical notation of
+	 * this interval.
+	 */
+	public String inMathematicalNotation() {
+		String lowerString = lower == null ? "−∞" : lower.toString();
+		String upperString = upper == null ? "+∞" : upper.toString();
+
+		int totalLength = 4 + lowerString.length() + upperString.length();
+		StringBuilder sb = new StringBuilder(totalLength);
+
+		sb.append(lowerMode.equals(EndpointMode.CLOSED) ? '[' : '(');
+		sb.append(lowerString);
+		sb.append(", ");
+		sb.append(upperString);
+		sb.append(upperMode.equals(EndpointMode.CLOSED) ? ']' : ')');
+
+		return sb.toString();
+	}
+
+	@Override
+	public String toString() {
+		return "IntegerInterval: " + inMathematicalNotation();
 	}
 }
