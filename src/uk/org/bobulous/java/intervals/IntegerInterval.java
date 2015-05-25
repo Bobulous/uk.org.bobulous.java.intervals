@@ -20,7 +20,7 @@ import java.util.Objects;
  *
  * @author Bobulous <http://www.bobulous.org.uk/>
  */
-public class IntegerInterval implements NumericInterval<Integer> {
+public final class IntegerInterval implements NumericInterval<Integer> {
 
 	private final Integer lower;
 	private final Integer upper;
@@ -35,6 +35,33 @@ public class IntegerInterval implements NumericInterval<Integer> {
 	 */
 	public static final IntegerInterval EMPTY_SET = new IntegerInterval(
 			EndpointMode.OPEN, 0, 0, EndpointMode.OPEN);
+
+	/**
+	 * An interval which includes all <code>Integer</code> values.
+	 */
+	public static final IntegerInterval UNBOUNDED = new IntegerInterval(
+			EndpointMode.OPEN, null, null, EndpointMode.OPEN);
+
+	/**
+	 * An interval which includes only the integers zero and one.
+	 */
+	public static final IntegerInterval ZERO_OR_ONE = new IntegerInterval(
+			EndpointMode.CLOSED, 0, 1, EndpointMode.CLOSED);
+
+	/**
+	 * An interval which includes all non-negative <code>Integer</code> values.
+	 * Any <code>Integer</code> value greater-than-or-equal-to zero is included.
+	 */
+	public static final IntegerInterval ZERO_OR_MORE = new IntegerInterval(
+			EndpointMode.CLOSED, 0, null, EndpointMode.OPEN);
+
+	/**
+	 * An interval which includes all positive, non-zero <code>Integer</code>
+	 * values. Any <code>Integer</code> value greater-than-or-equal-to one is
+	 * included.
+	 */
+	public static final IntegerInterval ONE_OR_MORE = new IntegerInterval(
+			EndpointMode.CLOSED, 1, null, EndpointMode.OPEN);
 
 	/*
 	Private constructor because static methods are provided for the creation of
@@ -59,7 +86,7 @@ public class IntegerInterval implements NumericInterval<Integer> {
 	 * @return an <code>IntegerInterval</code> with the given endpoint values
 	 * and both endpoint modes set to <code>EndpointMode.CLOSED</code>.
 	 */
-	public static IntegerInterval closed(Integer lower, Integer upper) {
+	public static final IntegerInterval closed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.CLOSED, lower, upper,
 				EndpointMode.CLOSED);
 	}
@@ -74,7 +101,7 @@ public class IntegerInterval implements NumericInterval<Integer> {
 	 * @return an <code>IntegerInterval</code> with the given endpoint values
 	 * and both endpoint modes set to <code>EndpointMode.OPEN</code>.
 	 */
-	public static IntegerInterval open(Integer lower, Integer upper) {
+	public static final IntegerInterval open(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.OPEN, lower, upper,
 				EndpointMode.OPEN);
 	}
@@ -90,7 +117,7 @@ public class IntegerInterval implements NumericInterval<Integer> {
 	 * and the lower endpoint mode set to <code>EndpointMode.CLOSED</code> and
 	 * the upper endpoint mode set to <code>EndpointMode.OPEN</code>.
 	 */
-	public static IntegerInterval leftClosed(Integer lower, Integer upper) {
+	public static final IntegerInterval leftClosed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.CLOSED, lower, upper,
 				EndpointMode.OPEN);
 	}
@@ -107,7 +134,7 @@ public class IntegerInterval implements NumericInterval<Integer> {
 	 * and the lower endpoint mode set to <code>EndpointMode.OPEN</code> and the
 	 * upper endpoint mode set to <code>EndpointMode.CLOSED</code>.
 	 */
-	public static IntegerInterval rightClosed(Integer lower, Integer upper) {
+	public static final IntegerInterval rightClosed(Integer lower, Integer upper) {
 		return new IntegerInterval(EndpointMode.OPEN, lower, upper,
 				EndpointMode.CLOSED);
 	}
