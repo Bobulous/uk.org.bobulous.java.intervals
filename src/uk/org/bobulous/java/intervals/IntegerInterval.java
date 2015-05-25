@@ -20,7 +20,7 @@ import java.util.Objects;
  *
  * @author Bobulous <http://www.bobulous.org.uk/>
  */
-class IntegerInterval implements NumericInterval<Integer> {
+public class IntegerInterval implements NumericInterval<Integer> {
 
 	private final Integer lower;
 	private final Integer upper;
