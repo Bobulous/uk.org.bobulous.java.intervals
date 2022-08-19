@@ -1,3 +1,1 @@
-I've migrated this project from GitHub to GitLab.
-
-Please use the [GitLab JavaIntervals repository](https://gitlab.com/Bobulous/JavaIntervals) from now on.
+This repository has moved to [Codeberg](https://codeberg.org/Bobulous/JavaIntervals). This GitHub copy has been archived (read-only mode). To contribute to this project, please go to the [CodeBerg repository](https://codeberg.org/Bobulous/JavaIntervals).
